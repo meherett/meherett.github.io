@@ -42,38 +42,58 @@ const AWARDS = [
 export function EcosystemRecognition() {
   return (
     <section id="recognition" className="scroll-mt-24">
-      <h2 className="mb-8 text-center text-3xl font-semibold tracking-tight text-zinc-100">
-        Awards &amp; Recognition
+      <h2 className="mb-8 text-center">
+        <span className="inline-block border-2 border-black bg-[#FFCC00] px-4 py-1 text-2xl font-bold uppercase tracking-tight text-black shadow-[3px_3px_0_#000] md:text-3xl">
+          Awards &amp; Recognition
+        </span>
       </h2>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {AWARDS.map(({ icon: Icon, title, org, year, detail, highlight }) => (
           <div
             key={title}
-            className={`flex gap-4 rounded-xl border p-5 backdrop-blur-sm ${
-              highlight
-                ? "border-cyan-800/50 bg-cyan-900/10"
-                : "border-zinc-800 bg-zinc-900/40"
+            className={`flex gap-4 rounded-none border-2 border-black p-5 shadow-[3px_3px_0_#000] ${
+              highlight ? "bg-black text-white" : "bg-white text-black"
             }`}
           >
             <div
-              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border ${
+              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-none border-2 ${
                 highlight
-                  ? "border-cyan-700/50 bg-cyan-900/30 text-cyan-300"
-                  : "border-zinc-700 bg-zinc-800/50 text-zinc-300"
+                  ? "border-white bg-[#EE0000] text-white"
+                  : "border-black bg-[#FFCC00] text-black"
               }`}
             >
               <Icon className="h-5 w-5" />
             </div>
             <div>
               <div className="flex items-start justify-between gap-3">
-                <h3 className="text-sm font-semibold leading-snug text-zinc-100">
+                <h3
+                  className={`text-sm font-semibold leading-snug ${
+                    highlight ? "text-white" : "text-black"
+                  }`}
+                >
                   {title}
                 </h3>
-                <span className="shrink-0 text-xs text-zinc-500">{year}</span>
+                <span
+                  className={`shrink-0 text-xs ${
+                    highlight ? "text-white/60" : "text-black/60"
+                  }`}
+                >
+                  {year}
+                </span>
               </div>
-              <p className="text-xs font-medium text-cyan-500/80">{org}</p>
-              <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+              <p
+                className={`text-xs font-medium ${
+                  highlight ? "text-[#FFCC00]" : "text-black/60"
+                }`}
+              >
+                {org}
+              </p>
+              <p
+                className={`mt-2 text-sm leading-relaxed ${
+                  highlight ? "text-white/70" : "text-black/60"
+                }`}
+              >
                 {detail}
               </p>
             </div>
@@ -81,22 +101,24 @@ export function EcosystemRecognition() {
         ))}
       </div>
 
-      <h2 className="mt-16 mb-8 text-center text-3xl font-semibold tracking-tight text-zinc-100">
-        Interview
+      <h2 className="mt-16 mb-8 text-center">
+        <span className="inline-block border-2 border-black bg-[#FFCC00] px-4 py-1 text-2xl font-bold uppercase tracking-tight text-black shadow-[3px_3px_0_#000] md:text-3xl">
+          Interview
+        </span>
       </h2>
       <a
         href="https://medium.com/bytomofficial/interview-with-meheret-one-of-the-developers-from-bytom-community-80f9f181c09?source=social.tw"
         target="_blank"
         rel="noopener noreferrer"
-        className="group flex items-center justify-between gap-4 rounded-xl border border-zinc-800 bg-zinc-900/40 px-5 py-4 transition-colors hover:border-cyan-800/50"
+        className="group flex items-center justify-between gap-4 rounded-none border-2 border-black bg-white px-5 py-4 shadow-[3px_3px_0_#000] transition-colors hover:bg-[#FFCC00]"
       >
         <div>
-          <p className="text-sm font-medium text-zinc-200">
+          <p className="text-sm font-medium text-black">
             Featured interview with Bytom Blockchain Official
           </p>
-          <p className="text-xs text-zinc-500">Medium · February 20, 2021</p>
+          <p className="text-xs text-black/60">Medium · February 20, 2021</p>
         </div>
-        <ArrowUpRight className="h-5 w-5 shrink-0 text-zinc-500 transition-colors group-hover:text-cyan-400" />
+        <ArrowUpRight className="h-5 w-5 shrink-0 text-black" />
       </a>
     </section>
   );

@@ -24,6 +24,8 @@ import {
   DialogClose,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useState } from "react";
+import { RetroSelect } from "@/components/RetroSelect";
 type ProjectLink = { url: string; label: string };
 type Project = {
   title: string;
@@ -34,17 +36,37 @@ type Project = {
   tags: string[];
   screenshots: string[];
   colSpan: number;
+  highlight?: boolean;
 };
 
 // 1. DATA ARRAY ABSTRACTION
 const CAREER_DATA = [
   {
     id: "qtum",
-    company: "Qtum Foundation",
+    company: "Qtum (QTUM) Blockchain",
+    logo: "/svg/chains/qtum.svg",
     range: "2022 – Present",
     role: "Blockchain Engineer",
     period: "06/2022 – 01/2026",
-    summary: "Developed distributed ledger systems applicable to large and complex production-level environments while ensuring secure deployment.",
+    summary: (
+      <>
+        <a
+          href="https://qtum.org"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#0000EE] underline visited:text-[#551A8B] hover:bg-[#FFCC00]"
+        >
+          Qtum
+        </a>{" "}
+        is an open-source proof-of-stake blockchain that combines
+        Bitcoin&apos;s battle-tested UTXO model with the Ethereum Virtual
+        Machine through its Account Abstraction Layer — bringing EVM smart
+        contracts to a UTXO base. As a Blockchain Engineer, I develop
+        distributed ledger systems for large, complex production-level
+        environments — from wallet tooling and node infrastructure to
+        core-protocol testing — while ensuring secure deployment.
+      </>
+    ),
     projects: [
         {
         title: "Qtum-Snap",
@@ -55,8 +77,19 @@ const CAREER_DATA = [
         tags: ["Wallet", "R&D"],
         screenshots: ["/png/qtum-snap/qtum-snap-installer.png"],
         colSpan: 1,
+        highlight: true,
       },
-        {
+      {
+        title: "Qtum Core",
+        subtitle: "Testing",
+        description: "Core contributor responsible for writing, executing, and maintaining robust Python test codes to ensure the stability and security of the primary Qtum Core Wallet.",
+        links: [{ url: "https://github.com/qtumproject/qtum", label: "github.com/qtumproject/qtum" }],
+        tools: ["Python", "PyTest", "C++ Core"],
+        tags: ["Core Protocol"],
+        screenshots: [],
+        colSpan: 1,
+      },
+      {
         title: "Qtum-BIP38",
         subtitle: "Private Key / Wallet Import Format (WIF) Protection",
         description: "A Python library implementing the BIP38 standard for the Qtum protocol, ensuring robust private key and WIF (Wallet Import Format) encryption and decryption.",
@@ -76,23 +109,12 @@ const CAREER_DATA = [
         tools: ["Python", "Docker", "Linux"],
         tags: ["Infrastructure", "IaaS"],
         screenshots: [
-            "/png/qnode/register.png",
             "/png/qnode/total-requests-volume.png",
             "/png/qnode/top-method-request-volumes.png",
-            "/png/qnode/network-request-volumes.png",
-            "/png/qnode/requests-activity.png",
+            "/png/qnode/network-request-volumes.png"
         ],
         colSpan: 1,
-      },
-      {
-        title: "Qtum Core",
-        subtitle: "Testing",
-        description: "Core contributor responsible for writing, executing, and maintaining robust Python test codes to ensure the stability and security of the primary Qtum Core Wallet.",
-        links: [{ url: "https://github.com/qtumproject/qtum", label: "github.com/qtumproject/qtum" }],
-        tools: ["Python", "PyTest", "C++ Core"],
-        tags: ["Core Protocol"],
-        screenshots: [],
-        colSpan: 1,
+        highlight: true,
       },
       {
         title: "Qtum-Exporter",
@@ -103,16 +125,45 @@ const CAREER_DATA = [
         tags: ["Monitoring", "DevOps"],
         screenshots: [],
         colSpan: 1,
+      },
+      {
+        title: "Qtum-OB",
+        subtitle: "Orphan Blocks Finder",
+        description: "A diagnostic tool that scans Qtum Core debug files to detect and extract orphan blocks, helping node operators analyze chain reorganizations and block propagation health.",
+        links: [{ url: "https://github.com/meherett/qtum-ob", label: "github.com/meherett/qtum-ob" }],
+        tools: ["Python", "Qtum Core"],
+        tags: ["Diagnostics", "Tooling"],
+        screenshots: [],
+        colSpan: 1,
       }
     ]
   },
   {
     id: "xinfin",
-    company: "XinFin Foundation",
+    company: "XinFin (XDC) Blockchain",
+    logo: "/svg/chains/xinfin.svg",
     range: "2021 – 2022",
     role: "Blockchain Engineer",
     period: "01/2021 – 10/2022",
-    summary: "Designed blockchain libraries, tools, and utilities to facilitate secure integration of distributed ledger systems into production-level networks.",
+    summary: (
+      <>
+        <a
+          href="https://xinfin.org"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#0000EE] underline visited:text-[#551A8B] hover:bg-[#FFCC00]"
+        >
+          XinFin
+        </a>{" "}
+        is the Singapore-based organization behind the XDC Network — an
+        enterprise-grade, EVM-compatible blockchain running delegated
+        proof-of-stake (XDPoS) with near-zero fees, built for trade finance
+        and real-world asset tokenization. As a Blockchain Engineer, I
+        designed blockchain libraries, tools, and utilities that let
+        developers integrate the XDC protocol securely into production-level
+        networks.
+      </>
+    ),
     projects: [
       {
         title: "PyXDC",
@@ -123,6 +174,7 @@ const CAREER_DATA = [
         tags: ["Open-Source", "Library"],
         screenshots: [],
         colSpan: 1,
+        highlight: true,
       },
       {
         title: "Atomic-Swap Integration",
@@ -138,11 +190,30 @@ const CAREER_DATA = [
   },
   {
     id: "bytom",
-    company: "Bytom Blockchain",
+    company: "Bytom (BTM) Blockchain",
+    logo: "/svg/chains/bytom.svg",
     range: "2019 – 2021",
     role: "Blockchain Engineer",
     period: "08/2019 – 04/2021",
-    summary: "Designed blockchain libraries, tools, and utilities to facilitate secure integration of distributed ledger systems into production-level networks.",
+    summary: (
+      <>
+        <a
+          href="https://bytom.io"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#0000EE] underline visited:text-[#551A8B] hover:bg-[#FFCC00]"
+        >
+          Bytom
+        </a>{" "}
+        is a public blockchain protocol for registering and managing byte
+        assets — digitized real-world and native digital assets — on-chain,
+        paired with its high-throughput Vapor sidechain. As a Blockchain
+        Engineer, I designed the ecosystem&apos;s developer-facing libraries,
+        tools, and utilities, from cross-chain atomic swaps to protocol SDKs,
+        enabling secure integration of Bytom&apos;s mainchain and sidechain
+        into production-level networks.
+      </>
+    ),
     projects: [
       {
         title: "Atomic-Swap Project",
@@ -153,6 +224,7 @@ const CAREER_DATA = [
         tags: ["Cross-Chain"],
         screenshots: [],
         colSpan: 1,
+        highlight: true,
       },
       {
         title: "PyBytom",
@@ -163,6 +235,7 @@ const CAREER_DATA = [
         tags: ["Award-Winning", "Library"],
         screenshots: [],
         colSpan: 1,
+        highlight: true,
       },
       {
         title: "Py-Equity",
@@ -185,14 +258,16 @@ function ProjectScreenshotsModal({ project, initialIndex, children }: { project:
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
-      <DialogContent showCloseButton={false} className="min-w-[75vw] p-0">
+      <DialogContent showCloseButton={false} className="min-w-[75vw] rounded-none border-2 border-black bg-white p-0 shadow-[3px_3px_0_#000]">
         <div className="relative w-full">
-          <DialogTitle></DialogTitle>
+          <DialogTitle className="sr-only">
+            {project.title} screenshots
+          </DialogTitle>
           <Carousel className="w-full" opts={{ startIndex: initialIndex, loop: true }}>
                 <CarouselContent>
                     {project.screenshots.map((img: string, index: number) => (
                         <CarouselItem key={index}>
-                            <div className="relative w-full h-[85vh] flex items-center justify-center bg-transparent">
+                            <div className="relative w-full h-[85vh] flex items-center justify-center bg-white">
                                 <Image
                                     src={img}
                                     alt={`${project.title} Screenshot ${index + 1}`}
@@ -205,12 +280,12 @@ function ProjectScreenshotsModal({ project, initialIndex, children }: { project:
                 </CarouselContent>
                 {project.screenshots.length > 1 && (
                     <>
-                        <CarouselPrevious className="left-4 bg-zinc-800/50 border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-white" />
-                        <CarouselNext className="right-4 bg-zinc-800/50 border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-white" />
+                        <CarouselPrevious className="left-4 rounded-none border-2 border-black bg-white text-black hover:bg-[#FFCC00] hover:text-black" />
+                        <CarouselNext className="right-4 rounded-none border-2 border-black bg-white text-black hover:bg-[#FFCC00] hover:text-black" />
                     </>
                 )}
             </Carousel>
-            <DialogClose className="absolute top-4 right-4 z-50 rounded-full bg-black/50 p-2 text-white hover:bg-black/70 transition-colors">
+            <DialogClose className="absolute top-4 right-4 z-50 rounded-none border-2 border-black bg-white p-2 text-black shadow-[2px_2px_0_#000] transition-colors hover:bg-[#EE0000] hover:text-white">
                 <X className="h-6 w-6" />
             </DialogClose>
         </div>
@@ -221,17 +296,33 @@ function ProjectScreenshotsModal({ project, initialIndex, children }: { project:
 
 // 3. REUSABLE CARD COMPONENT
 function ProjectCard({ project }: { project: Project }) {
+  const dark = Boolean(project.highlight);
+
   return (
-    <Card className="pt-0 border-zinc-800 bg-zinc-900/40 flex flex-col h-full overflow-hidden">
+    <Card
+      className={`pt-0 rounded-none border-2 border-black shadow-[3px_3px_0_#000] flex flex-col h-full overflow-hidden ${
+        dark ? "bg-black text-white" : "bg-white"
+      }`}
+    >
       {project.screenshots && project.screenshots.length > 0 && (
         <CardHeader className="p-0 shrink-0">
-          <div className="w-full overflow-hidden rounded-t-xl border-b border-zinc-800 bg-zinc-950 relative group">
+          <div
+            className={`w-full rounded-none border-b-2 relative group p-3 ${
+              dark ? "border-white bg-black" : "border-black bg-white"
+            }`}
+          >
             <Carousel className="w-full">
               <CarouselContent>
                 {project.screenshots.map((img: string, imgIndex: number) => (
                   <CarouselItem key={imgIndex}>
                     <ProjectScreenshotsModal project={project} initialIndex={imgIndex}>
-                        <div className="relative cursor-pointer group">
+                        <div
+                          className={`relative cursor-pointer group overflow-hidden border-2 ${
+                            dark
+                              ? "border-white shadow-[2px_2px_0_#fff]"
+                              : "border-black shadow-[2px_2px_0_#000]"
+                          }`}
+                        >
                           <Image
                             src={img}
                             alt={`${project.title} Screenshot ${imgIndex + 1}`}
@@ -249,8 +340,8 @@ function ProjectCard({ project }: { project: Project }) {
               </CarouselContent>
               {project.screenshots.length > 1 && (
                 <>
-                  <CarouselPrevious className="left-2 bg-zinc-800/50 border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-white z-10" />
-                  <CarouselNext className="right-2 bg-zinc-800/50 border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-white z-10" />
+                  <CarouselPrevious className="left-2 rounded-none border-2 border-black bg-white text-black hover:bg-[#FFCC00] hover:text-black z-10" />
+                  <CarouselNext className="right-2 rounded-none border-2 border-black bg-white text-black hover:bg-[#FFCC00] hover:text-black z-10" />
                 </>
               )}
             </Carousel>
@@ -263,11 +354,19 @@ function ProjectCard({ project }: { project: Project }) {
         {/* UPDATED TITLE & SUBTITLE SECTION */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex flex-col gap-1">
-            <CardTitle className="text-lg font-semibold text-zinc-200">
+            <CardTitle
+              className={`text-lg font-semibold ${
+                dark ? "text-white" : "text-black"
+              }`}
+            >
               {project.title}
             </CardTitle>
             {project.subtitle && (
-              <span className="text-sm font-medium text-cyan-500/80">
+              <span
+                className={`text-sm font-medium ${
+                  dark ? "text-[#FFCC00]" : "text-[#0000EE]"
+                }`}
+              >
                 {project.subtitle}
               </span>
             )}
@@ -276,7 +375,7 @@ function ProjectCard({ project }: { project: Project }) {
           {project.tags && project.tags.length > 0 && (
             <div className="flex flex-wrap justify-end gap-2 shrink-0 pt-1">
               {project.tags.map((tag: string, i: number) => (
-                <Badge key={i} variant="default" className="bg-cyan-900/30 text-cyan-400 hover:bg-cyan-900/50 border-cyan-800/50">
+                <Badge key={i} variant="default" className="rounded-none border border-black bg-[#FFCC00] px-1.5 text-black shadow-none">
                   {tag}
                 </Badge>
               ))}
@@ -284,14 +383,26 @@ function ProjectCard({ project }: { project: Project }) {
           )}
         </div>
 
-        <p className="mt-4 text-sm text-zinc-400 grow">
+        <p
+          className={`mt-4 text-sm grow ${
+            dark ? "text-white/60" : "text-black/60"
+          }`}
+        >
           {project.description}
         </p>
 
         {project.tools && project.tools.length > 0 && (
           <div className="flex flex-wrap gap-2 pt-4">
             {project.tools.map((tool: string, i: number) => (
-              <Badge key={i} variant="outline" className="border-zinc-700 text-zinc-300">
+              <Badge
+                key={i}
+                variant="outline"
+                className={`rounded-none border px-1.5 shadow-none ${
+                  dark
+                    ? "border-white bg-black text-white"
+                    : "border-black bg-white text-black"
+                }`}
+              >
                 {tool}
               </Badge>
             ))}
@@ -306,7 +417,11 @@ function ProjectCard({ project }: { project: Project }) {
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs inline-flex items-center text-zinc-300 hover:text-cyan-400 transition-colors"
+                className={`text-xs inline-flex items-center underline hover:bg-[#FFCC00] hover:text-black ${
+                  dark
+                    ? "text-[#FFCC00]"
+                    : "text-[#0000EE] visited:text-[#551A8B]"
+                }`}
               >
                 <LinkIcon className="mr-2 h-3 w-3" /> {link.label}
               </a>
@@ -320,22 +435,46 @@ function ProjectCard({ project }: { project: Project }) {
 
 // 4. MAIN TIMELINE COMPONENT
 export function CareerTimeline() {
+  const [activeCompany, setActiveCompany] = useState(CAREER_DATA[0].id);
+
   return (
     <section id="career" className="w-full scroll-mt-24">
-      <h2 className="mb-8 text-center text-3xl font-semibold tracking-tight text-zinc-100">
-        Career Timeline
+      <h2 className="mb-8 text-center">
+        <span className="inline-block border-2 border-black bg-[#FFCC00] px-4 py-1 text-2xl font-bold uppercase tracking-tight text-black shadow-[3px_3px_0_#000] md:text-3xl">
+          Career Timeline
+        </span>
       </h2>
 
-      <Tabs defaultValue={CAREER_DATA[0].id} className="w-full">
-        <TabsList className="grid min-h-16 w-full grid-cols-3 items-stretch bg-transparent rounded-lg p-1">
+      <Tabs value={activeCompany} onValueChange={setActiveCompany} className="w-full">
+        <div className="mb-2 md:hidden">
+          <RetroSelect
+            value={activeCompany}
+            onChange={setActiveCompany}
+            ariaLabel="Select company"
+            options={CAREER_DATA.map((tab) => ({
+              value: tab.id,
+              label: `${tab.company.replace(/\s*\([A-Z]+\)/, "")} (${tab.range})`,
+            }))}
+          />
+        </div>
+
+        <TabsList className="hidden min-h-28 w-full grid-cols-3 items-stretch gap-2 bg-transparent p-0 md:grid">
           {CAREER_DATA.map((tab) => (
             <TabsTrigger
               key={tab.id}
               value={tab.id}
-              className="h-full flex-col gap-0.5 py-2 data-[state=active]:bg-zinc-800 data-[state=active]:text-cyan-400"
+              className="group h-full flex-col gap-1 py-2.5 rounded-none border-2 border-black bg-white text-black shadow-[2px_2px_0_#000] transition-colors hover:bg-[#FFCC00] data-[state=active]:translate-x-[2px] data-[state=active]:translate-y-[2px] data-[state=active]:bg-black data-[state=active]:text-white data-[state=active]:shadow-none data-[state=active]:hover:bg-black"
             >
+              <Image
+                src={tab.logo}
+                alt=""
+                aria-hidden
+                width={40}
+                height={40}
+                className="hidden h-10 w-10 shrink-0 group-data-[state=active]:invert md:block"
+              />
               <span>{tab.company}</span>
-              <span className="text-xs font-normal text-zinc-500">
+              <span className="text-xs font-normal text-black/60 group-data-[state=active]:text-white/60">
                 {tab.range}
               </span>
             </TabsTrigger>
@@ -348,9 +487,8 @@ export function CareerTimeline() {
 
           return (
             <TabsContent key={tab.id} value={tab.id} className="mt-6 space-y-6">
-              <div className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-6 backdrop-blur-sm">
-                <h3 className="text-xl font-bold text-zinc-100">{tab.role} ({tab.period})</h3>
-                <p className="mt-2 text-zinc-400 leading-relaxed">
+              <div className="rounded-none border-2 border-black bg-white p-6 shadow-[3px_3px_0_#000]">
+                <p className="text-black/70 leading-relaxed">
                   {tab.summary}
                 </p>
               </div>

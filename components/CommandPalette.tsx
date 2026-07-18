@@ -25,9 +25,9 @@ import {
 } from "lucide-react";
 
 const SECTIONS = [
+  { id: "hdwallet", label: "HDWallet (Flagship)", icon: KeyRound },
   { id: "career", label: "Career Timeline", icon: Briefcase },
   { id: "projects", label: "Personal Projects", icon: Boxes },
-  { id: "hdwallet", label: "HDWallet (Flagship)", icon: KeyRound },
   { id: "skills", label: "Technical Arsenal", icon: Code2 },
   { id: "education", label: "Education & Training", icon: GraduationCap },
   { id: "recognition", label: "Awards & Recognition", icon: Trophy },
@@ -78,7 +78,11 @@ export function CommandPalette() {
   }, []);
 
   return (
-    <CommandDialog open={open} onOpenChange={setOpen}>
+    <CommandDialog
+      open={open}
+      onOpenChange={setOpen}
+      className="rounded-none border-2 border-black shadow-[6px_6px_0_#000]"
+    >
       <CommandInput placeholder="Jump to a section or open a link..." />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
