@@ -1,7 +1,7 @@
 import type { ElementType, ReactNode } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { HdwalletDemo } from "@/components/HdwalletDemo";
+import { HDWalletDemo } from "@/components/HDWalletDemo";
 import {
   Star,
   GitFork,
@@ -33,6 +33,7 @@ type Project = {
   flagship?: boolean;
   highlight?: boolean;
   wide?: boolean;
+  badge?: string;
   description: ReactNode;
   features: string[];
   status: string;
@@ -131,7 +132,7 @@ const PROJECTS: Project[] = [
         icon: Globe,
       },
     ],
-    demo: <HdwalletDemo />,
+    demo: <HDWalletDemo />,
   },
   {
     icon: Lock,
@@ -244,7 +245,7 @@ const PROJECTS: Project[] = [
       </>
     ),
     features: ["Python", "PyTest", "Solidity", "EVM"],
-    status: "Creator & main-maintainer · 2019 · MIT",
+    status: "Creator & main-maintainer · 2019",
     stats: [
       { icon: Star, value: "25+", label: "Stars" },
       { icon: GitFork, value: "6+", label: "Forks" },
@@ -266,20 +267,63 @@ const PROJECTS: Project[] = [
     icon: ArrowLeftRight,
     title: "Atomic-Swap",
     subtitle: "Cross-Chain · HTLC Protocol",
+    highlight: true,
+    badge: "Sold",
     description: (
       <>
+        <span className="mb-3 flex flex-wrap items-center gap-2">
+          <a
+            href="https://pepy.tech/projects/swap"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://static.pepy.tech/personalized-badge/swap?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads"
+              alt="PyPI Downloads"
+              className="h-5"
+            />
+          </a>
+          <a
+            href="https://pepy.tech/projects/swap"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://static.pepy.tech/personalized-badge/swap?period=monthly&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads%2Fmonth"
+              alt="PyPI Downloads per month"
+              className="h-5"
+            />
+          </a>
+          <a
+            href="https://pepy.tech/projects/swap"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline-block"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://static.pepy.tech/personalized-badge/swap?period=weekly&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads%2Fweek"
+              alt="PyPI Downloads per week"
+              className="h-5"
+            />
+          </a>
+        </span>
         Python library for
-        <span className="font-bold text-black"> cross-chain atomic swaps</span>{" "}
+        <span className="font-bold text-[#FFCC00]"> cross-chain atomic swaps</span>{" "}
         between the networks of two cryptocurrencies, secured by Hash Time Lock
         Contracts (HTLCs) — no trusted third party required. Supports Bitcoin,
         Ethereum &amp; ERC20, XinFin &amp; XRC20, Bytom, and Vapor.
       </>
     ),
     features: ["Python", "HTLCs", "Bitcoin", "Ethereum", "XinFin", "Bytom", "Vapor"],
-    status: "Creator & main-maintainer · 2019 – present · AGPL-3.0",
+    status: "Creator & main-maintainer · 2019 – present",
     stats: [
+      { icon: Download, value: "80K+", label: "Downloads" },
       { icon: Star, value: "75+", label: "Stars" },
       { icon: GitFork, value: "30+", label: "Forks" },
+      { icon: Boxes, value: "60+", label: "Projects using it" },
     ],
     links: [
       {
@@ -363,9 +407,13 @@ function ProjectShowcaseCard({
                 >
                   {project.title}
                 </h3>
-                {project.flagship && (
-                  <span className="rounded-none border-2 border-white bg-[#EE0000] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white">
-                    Flagship
+                {(project.flagship || project.badge) && (
+                  <span
+                    className={`rounded-none border-2 bg-[#EE0000] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white ${
+                      dark ? "border-white" : "border-black"
+                    }`}
+                  >
+                    {project.flagship ? "Flagship" : project.badge}
                   </span>
                 )}
               </div>
@@ -478,7 +526,7 @@ export function OpenSourceRepositories() {
         </span>
       </h2>
       <p className="mb-8 text-center text-sm text-black/60">
-        Independent libraries built &amp; maintained under Talon-Lab
+        Independent libraries built &amp; maintained
       </p>
 
       <div className="space-y-6">
@@ -507,7 +555,7 @@ export function FlagshipProject() {
     <section className="scroll-mt-24">
       <h2 className="mb-2 text-center">
         <span className="inline-block border-2 border-black bg-[#FFCC00] px-4 py-1 text-2xl font-bold uppercase tracking-tight text-black shadow-[3px_3px_0_#000] md:text-3xl">
-          Flagship Project
+          Flagship
         </span>
       </h2>
       <p className="mb-8 text-center text-sm text-black/60">

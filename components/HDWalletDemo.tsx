@@ -1,7 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Copy, Check, Globe, ArrowUpRight } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import {
+  Copy,
+  Check,
+  Globe,
+  ArrowUpRight,
+  Download,
+  Eraser,
+} from "lucide-react";
 import { RetroSelect } from "@/components/RetroSelect";
 
 type CoinOption = { key: string; name: string; symbol: string };
@@ -21,6 +28,8 @@ type DemoResult = {
   spendPublicKey: string;
   viewPublicKey: string;
   addresses: { type: string; value: string }[];
+  fingerprint: string;
+  dump: Record<string, unknown> | null;
 };
 
 // --- Minimal typing over the dynamically-imported hdwallet.js modules ---
@@ -44,6 +53,8 @@ type HDWalletLike = {
   getViewPublicKey(): string | null;
   getAddress(options?: { address: string }): string;
   getPrimaryAddress(): string;
+  getFingerprint(): string | null;
+  getDump(): Record<string, unknown>;
 };
 
 type HDWalletCtor = new (
@@ -63,7 +74,88 @@ type CryptoClass = {
   ADDRESSES: { getAddresses(): string[] };
 };
 
-function CopyButton({ text }: { text: string }) {
+// The library's own full dump (seed, root keys, WIF, chain codes,
+// fingerprints, every address type); falls back to the collected fields.
+function resultPayload(res: DemoResult): Record<string, unknown> {
+  if (res.dump) return res.dump;
+  const payload: Record<string, unknown> = {
+    cryptocurrency: res.coin,
+    symbol: res.symbol,
+    entropy: res.entropy,
+    mnemonic: res.mnemonic,
+  };
+  if (res.path) payload.path = res.path;
+  if (res.xPrivateKey) payload["xprivate-key"] = res.xPrivateKey;
+  if (res.xPublicKey) payload["xpublic-key"] = res.xPublicKey;
+  if (res.privateKey) payload["private-key"] = res.privateKey;
+  if (res.publicKey) payload["public-key"] = res.publicKey;
+  if (res.spendPrivateKey) payload["spend-private-key"] = res.spendPrivateKey;
+  if (res.viewPrivateKey) payload["view-private-key"] = res.viewPrivateKey;
+  if (res.spendPublicKey) payload["spend-public-key"] = res.spendPublicKey;
+  if (res.viewPublicKey) payload["view-public-key"] = res.viewPublicKey;
+  if (res.addresses.length === 1 && !res.addresses[0].type) {
+    payload.address = res.addresses[0].value;
+  } else {
+    payload.addresses = Object.fromEntries(
+      res.addresses.map((a) => [a.type.toLowerCase(), a.value])
+    );
+  }
+  return payload;
+}
+
+// Retro CGA-terminal JSON highlighting: yellow keys, green strings,
+// cyan numbers, magenta booleans, red null.
+function JsonView({ json }: { json: string }) {
+  const nodes: ReactNode[] = [];
+  const token =
+    /("(?:\\u[a-fA-F0-9]{4}|\\[^u]|[^\\"])*")(\s*:)?|\b(true|false)\b|\bnull\b|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g;
+  let last = 0;
+  let key = 0;
+  let match: RegExpExecArray | null;
+  while ((match = token.exec(json))) {
+    if (match.index > last) nodes.push(json.slice(last, match.index));
+    const [full, str, colon, bool] = match;
+    if (str !== undefined) {
+      if (colon) {
+        nodes.push(
+          <span key={key++} className="text-[#FFCC00]">
+            {str}
+          </span>,
+          colon
+        );
+      } else {
+        nodes.push(
+          <span key={key++} className="text-white">
+            {str}
+          </span>
+        );
+      }
+    } else if (bool !== undefined) {
+      nodes.push(
+        <span key={key++} className="text-[#FF55FF]">
+          {full}
+        </span>
+      );
+    } else if (full === "null") {
+      nodes.push(
+        <span key={key++} className="text-[#FF5555]">
+          {full}
+        </span>
+      );
+    } else {
+      nodes.push(
+        <span key={key++} className="text-[#55FFFF]">
+          {full}
+        </span>
+      );
+    }
+    last = match.index + full.length;
+  }
+  nodes.push(json.slice(last));
+  return <>{nodes}</>;
+}
+
+function CopyButton({ text, dark = false }: { text: string; dark?: boolean }) {
   const [copied, setCopied] = useState(false);
 
   async function copy() {
@@ -77,14 +169,18 @@ function CopyButton({ text }: { text: string }) {
       type="button"
       onClick={copy}
       aria-label="Copy to clipboard"
-      className="mt-0.5 shrink-0 border border-black/50 p-1 text-black/60 hover:bg-black hover:text-white"
+      className={
+        dark
+          ? "mt-0.5 shrink-0 border border-white/50 bg-black p-1 text-white/70 hover:bg-white hover:text-black"
+          : "mt-0.5 shrink-0 border border-black/50 p-1 text-black/60 hover:bg-black hover:text-white"
+      }
     >
       {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
     </button>
   );
 }
 
-export function HdwalletDemo() {
+export function HDWalletDemo() {
   const [coins, setCoins] = useState<CoinOption[] | null>(null);
   const [coin, setCoin] = useState("Bitcoin");
   const [result, setResult] = useState<DemoResult | null>(null);
@@ -273,12 +369,38 @@ export function HdwalletDemo() {
         spendPublicKey: safe(() => hdwallet.getSpendPublicKey()),
         viewPublicKey: safe(() => hdwallet.getViewPublicKey()),
         addresses,
+        fingerprint: safe(() => hdwallet.getFingerprint()),
+        dump: (() => {
+          try {
+            return hdwallet.getDump();
+          } catch {
+            return null;
+          }
+        })(),
       });
     } catch (e) {
       setError(e instanceof Error ? e.message : "Generation failed");
     } finally {
       setBusy(false);
     }
+  }
+
+  function downloadJson() {
+    if (!result) return;
+    const blob = new Blob([JSON.stringify(resultPayload(result), null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    const coinName = result.coin.toLowerCase().replace(/\s+/g, "-");
+    link.download = `${
+      result.fingerprint ? `${result.fingerprint}.` : ""
+    }${coinName}.hdwallet.json`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
   }
 
   const coinOptions =
@@ -291,15 +413,7 @@ export function HdwalletDemo() {
         Try it live — choose a cryptocurrency and click{" "}
         <span className="font-bold text-[#FFCC00]">GENERATE</span> to derive a
         wallet right here. For the full experience, visit{" "}
-        <a
-          href="https://hdwallet.online"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[#FFCC00] underline hover:bg-[#FFCC00] hover:text-black"
-        >
-          hdwallet.online
-        </a>
-        .
+        <span className="font-bold text-[#FFCC00]">hdwallet.online</span>
       </p>
 
       <div className="border-2 border-black bg-white p-4 text-black shadow-[3px_3px_0_#fff]">
@@ -335,67 +449,52 @@ export function HdwalletDemo() {
       </div>
 
       {result && (
-        <dl className="mt-4 space-y-2.5 text-xs md:text-sm">
-          {(
-            [
-              { label: "entropy", value: result.entropy },
-              { label: "mnemonic", value: result.mnemonic },
-              { label: "path", value: result.path },
-              { label: "xprivate-key", value: result.xPrivateKey, tone: "danger" },
-              { label: "xpublic-key", value: result.xPublicKey },
-              { label: "private-key", value: result.privateKey, tone: "danger" },
-              { label: "public-key", value: result.publicKey },
-              {
-                label: "spend private-key",
-                value: result.spendPrivateKey,
-                tone: "danger",
-              },
-              {
-                label: "view private-key",
-                value: result.viewPrivateKey,
-                tone: "danger",
-              },
-              { label: "spend public-key", value: result.spendPublicKey },
-              { label: "view public-key", value: result.viewPublicKey },
-              ...result.addresses.map((a) => ({
-                label: a.type
-                  ? `${a.type.toLowerCase()} address`
-                  : `${result.coin.toLowerCase()} (${result.symbol}) address`,
-                value: a.value,
-                tone: "address",
-              })),
-            ] as { label: string; value: string; tone?: "danger" | "address" }[]
-          )
-            .filter((row) => row.value)
-            .map((row) => (
-              <div key={row.label}>
-                <dt className="text-black/50">{row.label}</dt>
-                <dd className="flex items-start gap-2">
-                  <span
-                    className={
-                      row.tone === "address"
-                        ? "break-all bg-[#FFCC00] px-1 font-bold text-black"
-                        : row.tone === "danger"
-                          ? "break-all bg-[#EE0000] px-1 text-white"
-                          : "break-all bg-black px-1 text-white"
-                    }
-                  >
-                    {row.value}
-                  </span>
-                  <CopyButton text={row.value} />
-                </dd>
-              </div>
-            ))}
-        </dl>
+        <div className="relative mt-4 border-2 border-black bg-black p-3">
+          <div className="absolute right-2 top-2">
+            <CopyButton
+              dark
+              text={JSON.stringify(resultPayload(result), null, 2)}
+            />
+          </div>
+          <pre className="overflow-x-auto pr-8 text-[11px] leading-relaxed text-white/60 md:text-xs">
+            <JsonView json={JSON.stringify(resultPayload(result), null, 2)} />
+          </pre>
+        </div>
+      )}
+
+      {result && (
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={downloadJson}
+            className="inline-flex items-center gap-1.5 rounded-none border-2 border-black bg-[#FFCC00] px-2.5 py-1 text-xs font-bold uppercase text-black shadow-[2px_2px_0_#000] transition-colors hover:bg-black hover:text-white active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+          >
+            <Download className="h-3.5 w-3.5" />
+            Download
+          </button>
+          <button
+            type="button"
+            onClick={() => setResult(null)}
+            className="inline-flex items-center gap-1.5 rounded-none border-2 border-black bg-[#C0C0C0] px-2.5 py-1 text-xs font-bold uppercase text-black shadow-[2px_2px_0_#000] transition-colors hover:bg-[#FFCC00] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+          >
+            <Eraser className="h-3.5 w-3.5" />
+            Clean
+          </button>
+        </div>
       )}
 
       {error && <p className="mt-3 text-xs text-[#EE0000]">{error}</p>}
 
       <div className="mt-4 flex flex-wrap items-end justify-between gap-3">
-        <p className="max-w-md text-[10px] leading-relaxed text-black/50">
+        <p className="max-w-md text-[10px] leading-relaxed text-black">
           Runs entirely in your browser via the hdwallet.js library — nothing
-          is sent anywhere. Demo only: do not fund generated addresses or
-          reuse these keys.
+          is sent anywhere.{" "}
+          <span className="font-bold">
+            Disclaimer:{" "}
+            <span className="text-[#EE0000]">
+              do not fund generated addresses or reuse these keys.
+            </span>
+          </span>
         </p>
         <a
           href="https://hdwallet.online"

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Terminal, Github, Mail } from "lucide-react";
+import { Terminal, Github, Mail, Send } from "lucide-react";
 
 function openPalette() {
   window.dispatchEvent(new Event("open-command-palette"));
@@ -64,24 +64,47 @@ export function Hero() {
         cryptocurrency solutions and decentralized infrastructure.
       </p>
 
-      <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+      <div className="mt-8 flex flex-row items-center justify-center gap-4">
         <Button
           asChild
           size="lg"
-          className="rounded-none border-2 border-black bg-[#FFCC00] text-black shadow-[2px_2px_0_#000] hover:bg-black hover:text-white active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+          className="rounded-none border-2 border-black bg-[#FFCC00] text-black shadow-[2px_2px_0_#000] hover:bg-black hover:text-white active:translate-x-[2px] active:translate-y-[2px] active:shadow-none max-sm:px-4"
         >
-          <a href="https://github.com/meherett" target="_blank" rel="noopener noreferrer">
-            <Github className="mr-2 h-4 w-4" /> View GitHub
+          <a
+            href="https://github.com/meherett"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="View GitHub"
+          >
+            <Github className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">View GitHub</span>
           </a>
         </Button>
         <Button
           asChild
           variant="outline"
           size="lg"
-          className="rounded-none border-2 border-black bg-[#C0C0C0] text-black shadow-[2px_2px_0_#000] hover:bg-[#FFCC00] hover:text-black active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+          className="rounded-none border-2 border-black bg-[#C0C0C0] text-black shadow-[2px_2px_0_#000] hover:bg-[#FFCC00] hover:text-black active:translate-x-[2px] active:translate-y-[2px] active:shadow-none max-sm:px-4"
         >
-          <a href="mailto:meherett.batu@gmail.com">
-            <Mail className="mr-2 h-4 w-4" /> Contact Me
+          <a
+            href="https://t.me/meherett"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Telegram"
+          >
+            <Send className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">Telegram</span>
+          </a>
+        </Button>
+        <Button
+          asChild
+          variant="outline"
+          size="lg"
+          className="rounded-none border-2 border-black bg-[#C0C0C0] text-black shadow-[2px_2px_0_#000] hover:bg-[#FFCC00] hover:text-black active:translate-x-[2px] active:translate-y-[2px] active:shadow-none max-sm:px-4"
+        >
+          <a href="mailto:meherett.batu@gmail.com" aria-label="Contact Me">
+            <Mail className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">Contact Me</span>
           </a>
         </Button>
       </div>

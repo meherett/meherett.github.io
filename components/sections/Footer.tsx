@@ -1,9 +1,23 @@
 import { Separator } from "@/components/ui/separator";
-import { Github, Twitter, Mail, MapPin } from "lucide-react";
+import { Github, Send, Mail, MapPin } from "lucide-react";
+
+function XIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden
+      className={className}
+    >
+      <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+    </svg>
+  );
+}
 
 const SOCIALS = [
   { href: "https://github.com/meherett", label: "GitHub", icon: Github },
-  { href: "https://x.com/meherett", label: "X", icon: Twitter },
+  { href: "https://x.com/meherettbatu", label: "X", icon: XIcon },
+  { href: "https://t.me/meherett", label: "Telegram", icon: Send },
   { href: "mailto:meherett.batu@gmail.com", label: "Email", icon: Mail },
 ];
 
@@ -38,7 +52,7 @@ export function Footer() {
       </div>
 
       <p className="pt-6 text-center text-xs text-black/50">
-        Copyright © 2026 Meheret T. Batu
+        Copyright © {new Date().getFullYear()} Meheret T. Batu
       </p>
     </footer>
   );

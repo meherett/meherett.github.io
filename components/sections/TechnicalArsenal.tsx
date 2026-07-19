@@ -36,9 +36,9 @@ const GROUPS: { title: string; icon: ElementType; skills: Skill[] }[] = [
   },
 ];
 
-const SPOKEN = [
+const SPOKEN: { name: string; note?: string }[] = [
   { name: "Amharic", note: "Native" },
-  { name: "English", note: "Fluent" },
+  { name: "English", note: "Intermediate" },
 ];
 
 function LevelDots({ level }: { level: number }) {
@@ -110,8 +110,10 @@ export function TechnicalArsenal() {
         <LanguagesIcon className="h-4 w-4 shrink-0 text-black" />
         {SPOKEN.map((lang) => (
           <span key={lang.name} className="text-sm text-black">
-            {lang.name}{" "}
-            <span className="text-xs text-black/60">({lang.note})</span>
+            {lang.name}
+            {lang.note && (
+              <span className="text-xs text-black/60"> ({lang.note})</span>
+            )}
           </span>
         ))}
       </div>

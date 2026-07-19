@@ -71,8 +71,12 @@ const CAREER_DATA = [
         {
         title: "Qtum-Snap",
         subtitle: "MetaMask Integration",
-        description: "Currently engineering the Qtum-Snap project, building custom wallet architecture to allow seamless interaction with the Qtum blockchain directly inside the MetaMask environment.",
-        links: [],
+        description: "Main-maintainer of the Qtum-Snap project, working in depth with MetaMask — building custom wallet architecture that enables seamless interaction with the Qtum blockchain directly inside the MetaMask environment.",
+        links: [
+            { url: "https://snaps.metamask.io/snap/npm/qtumproject/qtum-wallet", label: "snaps.metamask.io/qtum-wallet" },
+            { url: "https://github.com/qtumproject/qtum-extension-wallet", label: "github.com/qtumproject/qtum-extension-wallet" },
+            { url: "https://qtum-snap.meherett.com", label: "qtum-snap.meherett.com" }
+        ],
         tools: ["TypeScript", "MetaMask Snaps", "React"],
         tags: ["Wallet", "R&D"],
         screenshots: ["/png/qtum-snap/qtum-snap-installer.png"],
@@ -109,9 +113,9 @@ const CAREER_DATA = [
         tools: ["Python", "Docker", "Linux"],
         tags: ["Infrastructure", "IaaS"],
         screenshots: [
-            "/png/qnode/total-requests-volume.png",
             "/png/qnode/top-method-request-volumes.png",
-            "/png/qnode/network-request-volumes.png"
+            "/png/qnode/network-request-volumes.png",
+            "/png/qnode/total-requests-volume.png"
         ],
         colSpan: 1,
         highlight: true,
@@ -373,7 +377,7 @@ function ProjectCard({ project }: { project: Project }) {
           </div>
 
           {project.tags && project.tags.length > 0 && (
-            <div className="flex flex-wrap justify-end gap-2 shrink-0 pt-1">
+            <div className="flex min-w-0 flex-wrap justify-end gap-2 pt-1">
               {project.tags.map((tag: string, i: number) => (
                 <Badge key={i} variant="default" className="rounded-none border border-black bg-[#FFCC00] px-1.5 text-black shadow-none">
                   {tag}
@@ -463,7 +467,7 @@ export function CareerTimeline() {
             <TabsTrigger
               key={tab.id}
               value={tab.id}
-              className="group h-full flex-col gap-1 py-2.5 rounded-none border-2 border-black bg-white text-black shadow-[2px_2px_0_#000] transition-colors hover:bg-[#FFCC00] data-[state=active]:translate-x-[2px] data-[state=active]:translate-y-[2px] data-[state=active]:bg-black data-[state=active]:text-white data-[state=active]:shadow-none data-[state=active]:hover:bg-black"
+              className="group h-full flex-col gap-1 py-2.5 rounded-none border-2 border-black bg-[#C0C0C0] text-black shadow-[2px_2px_0_#000] transition-colors hover:bg-[#FFCC00] data-[state=active]:translate-x-[2px] data-[state=active]:translate-y-[2px] data-[state=active]:bg-black data-[state=active]:text-white data-[state=active]:shadow-none data-[state=active]:hover:bg-black"
             >
               <Image
                 src={tab.logo}
@@ -486,12 +490,10 @@ export function CareerTimeline() {
           const fullWidthProjects = tab.projects.filter(p => p.colSpan === 2);
 
           return (
-            <TabsContent key={tab.id} value={tab.id} className="mt-6 space-y-6">
-              <div className="rounded-none border-2 border-black bg-white p-6 shadow-[3px_3px_0_#000]">
-                <p className="text-black/70 leading-relaxed">
-                  {tab.summary}
-                </p>
-              </div>
+            <TabsContent key={tab.id} value={tab.id} className="mt-3 space-y-6">
+              <p className="text-black/70 leading-relaxed">
+                {tab.summary}
+              </p>
 
               <div className="columns-1 md:columns-2 gap-6">
                 {regularProjects.map((project, index) => (
