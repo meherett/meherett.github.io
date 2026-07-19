@@ -107,7 +107,7 @@ const PROJECTS: Project[] = [
       "Multi-account",
       "Millions of addresses",
     ],
-    status: "Creator & main-maintainer · 10/2020 – present",
+    status: "Creator & main-maintainer · 2020 – present",
     stats: [
       { icon: Download, value: "3M+", label: "Downloads" },
       { icon: Star, value: "550+", label: "Stars" },
@@ -191,7 +191,7 @@ const PROJECTS: Project[] = [
       </>
     ),
     features: ["BIP38", "No EC-multiply", "EC-multiply", "Python", "Cryptography"],
-    status: "Creator & main-maintainer · 09/2023 – present",
+    status: "Creator & main-maintainer · 2023 – present",
     stats: [
       { icon: Download, value: "47K+", label: "Downloads" },
       { icon: Star, value: "15+", label: "Stars" },
@@ -219,7 +219,7 @@ const PROJECTS: Project[] = [
       </>
     ),
     features: ["Python", "Solidity", "EVM", "Testing", "Deployment"],
-    status: "Creator · 02/2019 – 08/2020 · Public-archived",
+    status: "Creator · 2019 – 2020 · Public-archived",
     stats: [
       { icon: Star, value: "50+", label: "Stars" },
       { icon: GitFork, value: "5+", label: "Forks" },
