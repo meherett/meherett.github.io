@@ -486,9 +486,10 @@ export function HDWalletDemo() {
       {error && <p className="mt-3 text-xs text-[#EE0000]">{error}</p>}
 
       <div className="mt-4 flex flex-wrap items-end justify-between gap-3">
-        <p className="max-w-md text-[10px] leading-relaxed text-black">
+        <p className="w-full text-xs leading-relaxed text-black md:w-auto md:min-w-0 md:flex-1 md:text-sm">
           Runs entirely in your browser via the hdwallet.js library — nothing
-          is sent anywhere.{" "}
+          is sent anywhere.
+          <br />
           <span className="font-bold">
             Disclaimer:{" "}
             <span className="text-[#EE0000]">
@@ -500,7 +501,7 @@ export function HDWalletDemo() {
           href="https://hdwallet.online"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 border-2 border-black bg-[#C0C0C0] px-2.5 py-1 text-xs font-bold text-black shadow-[2px_2px_0_#000] transition-colors hover:bg-[#FFCC00] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+          className="ml-auto inline-flex items-center gap-1.5 border-2 border-black bg-[#C0C0C0] px-2.5 py-1 text-xs font-bold text-black shadow-[2px_2px_0_#000] transition-colors hover:bg-[#FFCC00] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
         >
           <Globe className="h-3.5 w-3.5" />
           hdwallet.online

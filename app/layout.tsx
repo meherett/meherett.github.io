@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Meheret Tesfaye Batu - Blockchain Engineer",
-  description: "Founder of Talon-Lab. Specializing in secure, user-centric cryptocurrency solutions and decentralized infrastructure.",
+  title: "Meheret (@meherett)",
+  description: "Specializing in secure, user-centric cryptocurrency solutions and decentralized infrastructure.",
 };
 
 export default function RootLayout({
