@@ -495,16 +495,16 @@ function ProjectShowcaseCard({
                 }`}
               >
                 <a href={href} target="_blank" rel="noopener noreferrer">
-                  <span className="flex items-center gap-2">
-                    <LinkIcon className="h-4 w-4" />
-                    {label}
+                  <span className="flex min-w-0 items-center gap-2">
+                    <LinkIcon className="h-4 w-4 shrink-0" />
+                    <span className="truncate">{label}</span>
                     {badge && (
-                      <span className="rounded-none border border-black bg-white px-1.5 py-0.5 text-[10px] font-semibold text-black">
+                      <span className="shrink-0 rounded-none border border-black bg-white px-1.5 py-0.5 text-[10px] font-semibold text-black">
                         {badge}
                       </span>
                     )}
                   </span>
-                  <ArrowUpRight className="h-4 w-4 opacity-60" />
+                  <ArrowUpRight className="h-4 w-4 shrink-0 opacity-60" />
                 </a>
               </Button>
             ))}

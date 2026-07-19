@@ -52,7 +52,7 @@ export function Footer() {
       </div>
 
       <p className="pt-6 text-center text-xs text-black/50">
-        Copyright © {new Date().getFullYear()} Meheret T. Batu
+        Copyright © {new Date().getFullYear()} · Meheret
       </p>
     </footer>
   );
