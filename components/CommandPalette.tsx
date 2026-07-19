@@ -21,6 +21,7 @@ import {
   Github,
   Globe,
   Mail,
+  Send,
   FlaskConical,
 } from "lucide-react";
 
@@ -35,8 +36,9 @@ const SECTIONS = [
 
 const LINKS = [
   { href: "https://github.com/meherett", label: "GitHub (@meherett)", icon: Github },
-  { href: "https://hdwallet.io", label: "HDWallet.io", icon: Globe },
+  { href: "https://hdwallet.io", label: "hdwallet.io", icon: Globe },
   { href: "https://talonlab.org", label: "Talon-Lab", icon: FlaskConical },
+  { href: "https://t.me/meherett", label: "Telegram (@meherett)", icon: Send },
   { href: "mailto:meherett.batu@gmail.com", label: "Email me", icon: Mail },
 ];
 
