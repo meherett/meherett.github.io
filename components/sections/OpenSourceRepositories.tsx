@@ -109,7 +109,7 @@ const PROJECTS: Project[] = [
     ],
     status: "Creator & main-maintainer · 2020 – present",
     stats: [
-      { icon: Download, value: "3M+", label: "Downloads" },
+      { icon: Download, value: "3.5M+", label: "Downloads" },
       { icon: Star, value: "550+", label: "Stars" },
       { icon: GitFork, value: "150+", label: "Forks" },
       { icon: Boxes, value: "400+", label: "Projects using it" },
@@ -366,6 +366,24 @@ const PROJECTS: Project[] = [
   },
 ];
 
+// Courier gives "." a full character cell, so a value like "3.5M+" reads
+// with a gaping decimal — pull the dot's neighbours back in.
+function StatValue({ value }: { value: string }) {
+  return (
+    <>
+      {value.split(/(\.)/).map((part, i) =>
+        part === "." ? (
+          <span key={i} className="mx-[-0.12em] inline-block">
+            .
+          </span>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      )}
+    </>
+  );
+}
+
 function ProjectShowcaseCard({
   project,
   compact = false,
@@ -476,7 +494,9 @@ function ProjectShowcaseCard({
                 }`}
               >
                 <StatIcon className="h-4 w-4 text-black" />
-                <p className="mt-2 text-2xl font-bold text-black">{value}</p>
+                <p className="mt-2 text-2xl font-bold text-black">
+                  <StatValue value={value} />
+                </p>
                 <p className="text-xs text-black/70">{label}</p>
               </div>
             ))}
