@@ -13,6 +13,16 @@ import { RetroSelect } from "@/components/RetroSelect";
 
 type CoinOption = { key: string; name: string; symbol: string };
 
+// Send a Google Analytics event (no-op if gtag hasn't loaded, e.g. blocked).
+function trackEvent(name: string, params?: Record<string, unknown>) {
+  const w = window as unknown as {
+    gtag?: (command: string, action: string, params?: unknown) => void;
+  };
+  if (typeof w.gtag === "function") {
+    w.gtag("event", name, params);
+  }
+}
+
 type DemoResult = {
   coin: string;
   symbol: string;
@@ -216,6 +226,7 @@ export function HDWalletDemo() {
   async function generate() {
     setBusy(true);
     setError(null);
+    trackEvent("generate_hdwallet", { cryptocurrency: coin });
     try {
       const [core, entropies, hds, derivations, mod] = await Promise.all([
         import("@hdwallet/core"),
@@ -429,7 +440,10 @@ export function HDWalletDemo() {
         <div className="flex w-full flex-col items-stretch gap-2 md:w-auto md:flex-row md:items-center">
           <RetroSelect
             value={coin}
-            onChange={setCoin}
+            onChange={(value) => {
+              setCoin(value);
+              trackEvent("select_cryptocurrency", { cryptocurrency: value });
+            }}
             ariaLabel="Cryptocurrency"
             variant="light"
             searchable

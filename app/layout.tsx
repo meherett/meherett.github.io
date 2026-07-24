@@ -20,6 +20,7 @@ export default function RootLayout({
         <style
           dangerouslySetInnerHTML={{
             __html: `
+html:not(.splash-done),html:not(.splash-done) body{overflow:hidden}
 #splash{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;background:#C0C0C0;font-family:"Courier New",Courier,monospace;transition:opacity .3s}
 #splash .splash-box{width:48px;height:48px;border:4px solid #000;background:#FFCC00;box-shadow:4px 4px 0 #000;animation:splash-spin 1.2s steps(8) infinite}
 @keyframes splash-spin{to{transform:rotate(360deg)}}
